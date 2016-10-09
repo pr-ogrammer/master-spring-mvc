@@ -13,7 +13,7 @@ public class HelloController {
 
     private static final String viewName = "resultPage";
 
-    @RequestMapping("/")
+    @RequestMapping("/hello")
     public String hello(@RequestParam(defaultValue = "anonymous") String name, Model model) {
         model.addAttribute("message", String.format("Hello %s! This message is from HelloController!", name));
         return viewName;
