@@ -24,7 +24,7 @@
         <div class="row">
             <div class="input-field col s6">
                 <input id="birthDate" th:field="${profileForm.birthDate}"  type="text" th:placeholder="${dateFormat}" th:errorclass="invalid"/>
-                <label for="birthDate">Birth date</label>
+                <label for="birthDate" th:text="#{${'NotNull.profileForm.birthDate'}}">Birth date</label>
                 <div th:errors="*{birthDate}" class="red-text">Error</div>
             </div>
         </div>
