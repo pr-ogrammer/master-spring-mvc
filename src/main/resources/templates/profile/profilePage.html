@@ -7,27 +7,47 @@
 </head>
 <body>
 <div class="row" layout:fragment="content">
-    <h2 class="indigo-text center">Personal information</h2>
+    <h2 class="indigo-text center" th:text="#{profile.title}">Personal information</h2>
     <form th:action="@{/profile}" th:object="${profileForm}" method="post" class="col m8 s12 offset-m2">
         <div class="row">
             <div class="input-field col s6">
-                <input id="twitterHandle" th:field="${profileForm.twitterHandle}" type="text" th:errorclass="invalid"/>
-                <label for="twitterHandle">Twitter ID</label>
+                <input id="twitterHandle" th:field="${profileForm.twitterHandle}" type="text" required="required" th:errorclass="invalid"/>
+                <label for="twitterHandle" th:text="#{twitter.handle}">Twitter ID</label>
                 <div th:errors="*{twitterHandle}" class="red-text">Error</div>
             </div>
             <div class="input-field col s6">
-                <input id="email" th:field="${profileForm.email}" type="text" th:errorclass="invalid"/>
-                <label for="email">E-mail</label>
+                <input id="email" th:field="${profileForm.email}" type="email" required="required" th:errorclass="invalid"/>
+                <label for="email" th:text="#{email}">E-mail</label>
                 <div th:errors="*{email}" class="red-text">Error</div>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <input id="birthDate" th:field="${profileForm.birthDate}"  type="text" th:placeholder="${dateFormat}" th:errorclass="invalid"/>
-                <label for="birthDate" th:text="#{${'NotNull.profileForm.birthDate'}}">Birth date</label>
+                <input id="birthDate" th:field="${profileForm.birthDate}" type="text" required="required" th:placeholder="${dateFormat}" th:errorclass="invalid"/>
+                <label for="birthDate" th:text="#{birthdate}">Birth date</label>
                 <div th:errors="*{birthDate}" class="red-text">Error</div>
             </div>
         </div>
+        <fieldset class="row">
+            <legend th:text="#{tastes.legend}">What do you like?</legend>
+            <button class="btn teal" type="submit" name="addTaste"
+                    th:text="#{add.taste}">Add taste
+                <i class="mdi-content-add left"></i>
+            </button>
+            <div th:errors="*{tastes}" class="red-text">Error</div>
+            <div class="row" th:each="row,rowStat : *{tastes}">
+                <div class="col s6">
+                    <input type="text" required="required" th:field="*{tastes[__${rowStat.index}__]}"
+                           th:placeholder="#{taste.placeholder}"/>
+                </div>
+                <div class="col s6">
+                    <button class="btn red" type="submit" name="removeTaste"
+                            th:value="${rowStat.index}" th:text="#{remove}">Delete
+                        <i class="mdi-action-delete right waves-effect"></i>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
         <div class="row s12">
             <button class="btn waves-effect waves-light" type="submit"
                     name="save">Send
