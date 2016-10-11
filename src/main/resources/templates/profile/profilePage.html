@@ -56,5 +56,14 @@
         </div>
     </form>
 </div>
+<script layout:fragment="script">
+    $('button').bind('click', function(e) {
+        if (e.currentTarget.name === 'save') {
+            $(e.currentTarget.form).removeAttr('novalidate');
+        } else {
+            $(e.currentTarget.form).attr('novalidate', 'novalidate');
+        }
+    });
+</script>
 </body>
 </html>
