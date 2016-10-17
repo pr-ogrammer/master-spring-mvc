@@ -1,5 +1,6 @@
 package pl.prutkowski.master.spring.mvc.config;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
  * Created by programmer on 10/9/16.
  */
 @Configuration
+@EnableConfigurationProperties({PictureUploadProperties.class})
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
