@@ -2,13 +2,13 @@ package pl.prutkowski.master.spring.mvc.controller.profile;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.prutkowski.master.spring.mvc.config.PictureUploadProperties;
 
@@ -20,6 +20,7 @@ import java.net.URLConnection;
  * Created by programmer on 10/17/16.
  */
 @Controller
+@SessionAttributes("picturePath")
 public class PictureUploadController {
 
     private final Resource picturesDir;
@@ -32,25 +33,38 @@ public class PictureUploadController {
         anonymousPicture = uploadProperties.getAnonymousPicture();
     }
 
+    @ModelAttribute("picturePath")
+    public Resource picturePath() {
+        return anonymousPicture;
+    }
+
     @RequestMapping("upload")
-    public String uploadPage() {
+    public String uploadPage() throws IOException {
         return UPLOAD_FORM_VIEW;
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String onUpload(MultipartFile file, RedirectAttributes redirectAttrs) throws IOException {
+    public String onUpload(MultipartFile file, RedirectAttributes redirectAttrs, Model model) throws IOException {
         if (file.isEmpty() || !isImage(file)) {
             redirectAttrs.addFlashAttribute("error", "Incorrect file type. Please upload an image.");
             return "redirect:/upload";
         }
-        copyFileToPictures(file);
+        Resource picturePath = copyFileToPictures(file);
+        model.addAttribute("picturePath", picturePath);
         return UPLOAD_FORM_VIEW;
     }
 
     @RequestMapping(value = "/uploadedPicture")
-    public void getUploadedPicture(HttpServletResponse response) throws IOException {
-        response.setHeader("Content-Type", URLConnection.guessContentTypeFromName(anonymousPicture.getFilename()));
-        IOUtils.copy(anonymousPicture.getInputStream(), response.getOutputStream());
+    public void getUploadedPicture(HttpServletResponse response, @ModelAttribute("picturePath") Resource picturePath) throws IOException {
+        response.setHeader("Content-Type", URLConnection.guessContentTypeFromName(picturePath.getFilename()));
+        IOUtils.copy(picturePath.getInputStream(), response.getOutputStream());
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ModelAndView handleIOException(IOException exception) {
+        ModelAndView modelAndView = new ModelAndView(UPLOAD_FORM_VIEW);
+        modelAndView.addObject("error", exception.getMessage());
+        return modelAndView;
     }
 
     private Resource copyFileToPictures(MultipartFile file) throws IOException {
