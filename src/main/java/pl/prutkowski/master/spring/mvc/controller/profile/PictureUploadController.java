@@ -2,6 +2,7 @@ package pl.prutkowski.master.spring.mvc.controller.profile;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
@@ -10,11 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.WebUtils;
 import pl.prutkowski.master.spring.mvc.config.PictureUploadProperties;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLConnection;
+import java.util.Locale;
 
 /**
  * Created by programmer on 10/17/16.
@@ -25,12 +29,14 @@ public class PictureUploadController {
 
     private final Resource picturesDir;
     private final Resource anonymousPicture;
+    private final MessageSource messageSource;
     private static final String UPLOAD_FORM_VIEW = "profile/uploadPage";
 
     @Autowired
-    public PictureUploadController(PictureUploadProperties uploadProperties) {
+    public PictureUploadController(PictureUploadProperties uploadProperties, MessageSource messageSource) {
         picturesDir = uploadProperties.getUploadPath();
         anonymousPicture = uploadProperties.getAnonymousPicture();
+        this.messageSource = messageSource;
     }
 
     @ModelAttribute("picturePath")
@@ -60,10 +66,17 @@ public class PictureUploadController {
         IOUtils.copy(picturePath.getInputStream(), response.getOutputStream());
     }
 
-    @ExceptionHandler(IOException.class)
-    public ModelAndView handleIOException(IOException exception) {
+    @RequestMapping("uploadError")
+    public ModelAndView onUploadError(Locale locale) {
         ModelAndView modelAndView = new ModelAndView(UPLOAD_FORM_VIEW);
-        modelAndView.addObject("error", exception.getMessage());
+        modelAndView.addObject("error", messageSource.getMessage("upload.file.too.big", null, locale));
+        return modelAndView;
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ModelAndView handleIOException(Locale locale) {
+        ModelAndView modelAndView = new ModelAndView(UPLOAD_FORM_VIEW);
+        modelAndView.addObject("error", messageSource.getMessage("upload.io.exception", null, locale));
         return modelAndView;
     }
 
