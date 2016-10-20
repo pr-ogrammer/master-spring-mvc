@@ -1,5 +1,6 @@
 package pl.prutkowski.master.spring.mvc.controller.profile;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +19,21 @@ import java.util.Locale;
 public class ProfileController {
 
     private static final String PROFILE_FORM_VIEW = "profile/profilePage";
+    private UserProfileSession userProfileSession;
+
+    @Autowired
+    public ProfileController(UserProfileSession userProfileSession) {
+        this.userProfileSession = userProfileSession;
+    }
 
     @ModelAttribute("dateFormat")
     public String localeFormat(Locale locale) {
         return USLocalDateFormatter.getPattern(locale);
+    }
+
+    @ModelAttribute
+    public ProfileForm getProfileForm() {
+        return userProfileSession.toForm();
     }
 
     @GetMapping("/profile")
@@ -34,6 +46,7 @@ public class ProfileController {
         if (bindingResult.hasErrors()) {
             return PROFILE_FORM_VIEW;
         }
+        userProfileSession.saveForm(profileForm);
         return "redirect:/profile";
     }
 
