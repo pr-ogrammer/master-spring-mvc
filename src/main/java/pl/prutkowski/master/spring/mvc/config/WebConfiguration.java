@@ -10,10 +10,12 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.util.UrlPathHelper;
 import pl.prutkowski.master.spring.mvc.date.USLocalDateFormatter;
 
 import java.time.LocalDate;
@@ -42,6 +44,13 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer =
                 container -> container.addErrorPages(new ErrorPage(MultipartException.class, "/uploadError"));
         return embeddedServletContainerCustomizer;
+    }
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        UrlPathHelper urlPathHelper = new UrlPathHelper();
+        urlPathHelper.setRemoveSemicolonContent(false);
+        configurer.setUrlPathHelper(urlPathHelper);
     }
 
     @Override
