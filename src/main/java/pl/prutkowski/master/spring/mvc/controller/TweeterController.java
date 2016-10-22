@@ -27,7 +27,7 @@ public class TweeterController {
     @Autowired
     private Twitter twitter;
 
-    @RequestMapping("/")
+    @RequestMapping("/searchTweet")
     public String searchTweets() {
         return SEARCH_VIEW_NAME;
     }

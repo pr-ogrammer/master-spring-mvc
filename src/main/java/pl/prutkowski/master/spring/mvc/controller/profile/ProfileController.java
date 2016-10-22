@@ -47,7 +47,7 @@ public class ProfileController {
             return PROFILE_FORM_VIEW;
         }
         userProfileSession.saveForm(profileForm);
-        return "redirect:/profile";
+        return "redirect:/search/mixed;keywords=" + String.join(",", profileForm.getTastes());
     }
 
     @PostMapping(value = "/profile", params = {"addTaste"})
