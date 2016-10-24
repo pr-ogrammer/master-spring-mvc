@@ -2,10 +2,10 @@ package pl.prutkowski.master.spring.mvc.controller.search;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.SearchParameters;
-import org.springframework.social.twitter.api.SearchResults;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Service;
+import pl.prutkowski.master.spring.mvc.controller.search.api.LightTweet;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +30,19 @@ public class SearchService {
         List<Tweet> tweets = searches.stream()
                 .map(params -> twitter.searchOperations().search(params))
                 .flatMap(searchResults -> searchResults.getTweets().stream())
+                .collect(Collectors.toList());
+
+        return tweets;
+    }
+
+    public List<LightTweet> searchLight(String searchType, List<String> keywords) {
+        List<SearchParameters> searches = keywords.stream()
+                .map(taste -> createSearchParam(searchType, taste))
+                .collect(Collectors.toList());
+        List<LightTweet> tweets = searches.stream()
+                .map(params -> twitter.searchOperations().search(params))
+                .flatMap(searchResults -> searchResults.getTweets().stream())
+                .map(LightTweet::ofTweet)
                 .collect(Collectors.toList());
 
         return tweets;
