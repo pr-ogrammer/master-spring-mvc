@@ -19,6 +19,9 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.util.UrlPathHelper;
 import pl.prutkowski.master.spring.mvc.date.USLocalDateFormatter;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.LocalDate;
 
@@ -26,6 +29,7 @@ import java.time.LocalDate;
  * Created by programmer on 10/9/16.
  */
 @Configuration
+@EnableSwagger2
 @EnableConfigurationProperties({PictureUploadProperties.class})
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
@@ -46,6 +50,14 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer =
                 container -> container.addErrorPages(new ErrorPage(MultipartException.class, "/uploadError"));
         return embeddedServletContainerCustomizer;
+    }
+
+    @Bean
+    public Docket userApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .paths(path -> path.startsWith("/api/"))
+                .build();
     }
 
     @Bean
