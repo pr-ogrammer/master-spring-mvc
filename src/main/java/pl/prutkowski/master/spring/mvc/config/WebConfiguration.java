@@ -18,11 +18,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.util.UrlPathHelper;
+import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
 import pl.prutkowski.master.spring.mvc.date.USLocalDateFormatter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 /**
@@ -46,6 +48,13 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    public SpringSecurityDialect springSecurityDialect(){
+        SpringSecurityDialect dialect = new SpringSecurityDialect();
+        return dialect;
+    }
+
+
+    @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
         EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer =
                 container -> container.addErrorPages(new ErrorPage(MultipartException.class, "/uploadError"));
@@ -66,6 +75,13 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         ObjectMapper objectMapper = builder.createXmlMapper(false).build();
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         return objectMapper;
+    }
+
+    @Bean
+    public Jackson2ObjectMapperBuilder jacksonBuilder() {
+        Jackson2ObjectMapperBuilder b = new Jackson2ObjectMapperBuilder();
+        b.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+        return b;
     }
 
     @Override
