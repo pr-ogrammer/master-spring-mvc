@@ -42,6 +42,6 @@ dependencies {
 	compile 'io.springfox:springfox-swagger-ui:2.1.2'
 	compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
 	compile 'org.springframework.boot:spring-boot-starter-security'
-	compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity3:2.1.2.RELEASE'
+	compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
