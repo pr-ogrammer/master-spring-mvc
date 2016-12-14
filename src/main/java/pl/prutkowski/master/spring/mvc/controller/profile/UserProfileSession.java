@@ -49,6 +49,10 @@ public class UserProfileSession implements Serializable {
         return picturePath == null ? null : new UrlResource(picturePath);
     }
 
+    public void setTastes(List<String> tastes) {
+        this.tastes = tastes;
+    }
+
     public List<String> getTastes() {
         return tastes;
     }
