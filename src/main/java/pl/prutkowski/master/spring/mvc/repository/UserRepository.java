@@ -25,7 +25,8 @@ public class UserRepository {
         if (!exists(email)) {
             throw new EntityNotFoundException("User " + email + " doesn't exist!");
         }
-        return save(user.getEmail(), user);
+        user.setEmail(email);
+        return save(email, user);
     }
 
     public void delete(String email) throws EntityNotFoundException {
@@ -53,5 +54,12 @@ public class UserRepository {
 
     public boolean exists(String email) {
         return userMap.containsKey(email);
+    }
+
+    public void reset(User... users) {
+        userMap.clear();
+        for (User user : users) {
+            save(user);
+        }
     }
 }

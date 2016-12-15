@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Created by programmer on 10/21/16.
  */
 @Service
-public class SearchService {
+public class SearchService implements TweeterSearch {
 
     private Twitter twitter;
 
@@ -23,6 +23,7 @@ public class SearchService {
         this.twitter = twitter;
     }
 
+    @Override
     public List<Tweet> search(String searchType, List<String> keywords) {
         List<SearchParameters> searches = keywords.stream()
                 .map(taste -> createSearchParam(searchType, taste))
@@ -35,6 +36,7 @@ public class SearchService {
         return tweets;
     }
 
+    @Override
     public List<LightTweet> searchLight(String searchType, List<String> keywords) {
         List<SearchParameters> searches = keywords.stream()
                 .map(taste -> createSearchParam(searchType, taste))

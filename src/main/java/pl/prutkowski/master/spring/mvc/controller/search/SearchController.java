@@ -16,10 +16,10 @@ import java.util.List;
 @Controller
 public class SearchController {
 
-    private SearchService searchService;
+    private TweeterSearch searchService;
 
     @Autowired
-    public SearchController(SearchService searchService) {
+    public SearchController(TweeterSearch searchService) {
         this.searchService = searchService;
     }
 

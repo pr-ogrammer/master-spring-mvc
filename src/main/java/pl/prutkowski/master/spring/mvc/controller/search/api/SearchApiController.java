@@ -2,7 +2,7 @@ package pl.prutkowski.master.spring.mvc.controller.search.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.prutkowski.master.spring.mvc.controller.search.SearchService;
+import pl.prutkowski.master.spring.mvc.controller.search.TweeterSearch;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import java.util.List;
 @RequestMapping("/api/search")
 public class SearchApiController {
 
-    private SearchService searchService;
+    private TweeterSearch searchService;
 
     @Autowired
-    public SearchApiController(SearchService searchService) {
+    public SearchApiController(TweeterSearch searchService) {
         this.searchService = searchService;
     }
 
