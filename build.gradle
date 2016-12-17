@@ -21,6 +21,7 @@ jar {
 	baseName = 'master-spring-mvc'
 	version = '0.0.1-SNAPSHOT'
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -30,6 +31,15 @@ repositories {
 	maven { url "https://repo.spring.io/milestone" }
 }
 
+configurations {
+	testCompile {
+		exclude module: 'selenium-safari-driver'
+		exclude module: 'selenium-ie-driver'
+		//exclude module: 'selenium-firefox-driver'
+		exclude module: 'selenium-htmlunit-driver'
+		exclude module: 'selenium-chrome-driver'
+	}
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
@@ -45,7 +55,30 @@ dependencies {
 	compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE'
 	compile "org.springframework.boot:spring-boot-starter-data-redis:1.4.0.M1"
 	compile 'org.springframework.session:spring-session:1.2.2.RELEASE'
+
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'com.jayway.jsonpath:json-path'
 	testCompile 'org.assertj:assertj-core:3.0.0'
+
+	testCompile 'org.fluentlenium:fluentlenium-assertj:0.10.3'
+	testCompile 'com.codeborne:phantomjsdriver:1.2.1'
+	testCompile 'org.seleniumhq.selenium:selenium-java:2.45.0'
+}
+
+configurations {
+	integrationTestCompile.extendsFrom testCompile
+	integrationTestRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+	integrationTest {
+		compileClasspath += main.output + test.output
+		runtimeClasspath += main.output + test.output
+	}
+}
+
+task integrationTest(type: Test) {
+	testClassesDir = sourceSets.integrationTest.output.classesDir
+	classpath = sourceSets.integrationTest.runtimeClasspath
+	reports.html.destination = file("${reporting.baseDir}/integrationTests")
 }
