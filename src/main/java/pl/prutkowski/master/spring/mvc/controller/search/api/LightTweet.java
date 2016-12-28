@@ -3,6 +3,7 @@ package pl.prutkowski.master.spring.mvc.controller.search.api;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -10,8 +11,9 @@ import java.util.Date;
 /**
  * Created by programmer on 10/24/16.
  */
-public class LightTweet {
+public class LightTweet implements Serializable {
 
+    private static final long serialVersionUID = -6811572718611500771L;
     private String profileImageUrl;
     private String user;
     private String text;

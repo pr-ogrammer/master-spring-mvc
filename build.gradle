@@ -44,6 +44,7 @@ configurations {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 	compile 'org.springframework.boot:spring-boot-starter-social-twitter'
 	compile 'org.webjars:materializecss:0.96.0'
 	compile 'org.webjars:jquery:2.1.4'
@@ -55,6 +56,8 @@ dependencies {
 	compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE'
 	compile "org.springframework.boot:spring-boot-starter-data-redis:1.4.0.M1"
 	compile 'org.springframework.session:spring-session:1.2.2.RELEASE'
+
+	compile group: 'org.springframework', name: 'spring-context-support', version: '4.0.0.RELEASE'
 
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'com.jayway.jsonpath:json-path'
